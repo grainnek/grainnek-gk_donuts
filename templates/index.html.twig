@@ -1,0 +1,205 @@
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+<body>
+
+<!-- Start of first page: #one -->
+<div data-role="page" id="one">
+
+	<div data-role="header">
+		<h1>Gráinne's Doughnuts</h1>
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content">    
+    
+	<h2>Welcome!</h2>
+
+	<p>Welcome to Gráinne's Doughnuts!</p>
+
+	<p>Services Offered:</p>
+	<ul>
+		<li>Online Doughnut Ordering.</li>
+	</ul>
+
+	<h3>Please select an option:</h3>
+	<p><a href="#login" class="ui-btn ui-shadow ui-corner-all">Login</a></p>
+	<p><a href="#register" class="ui-btn ui-shadow ui-corner-all">Register</a></p>
+		
+	</div><!-- /content -->
+
+	<div data-role="footer" data-theme="a">
+		<h4>Page Footer</h4>
+	</div><!-- /footer -->
+</div><!-- /page one -->
+
+<!-- Start of second page: #two -->
+<div data-role="page" id="login" data-theme="a">
+
+	<div data-role="header">
+		<h1>Login</h1>
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content">
+	<!-- Username -->
+	<label for="user">Username:</label>
+	<input type="text" name="user" id="uname" value="">
+	<!-- Password -->
+	<label for="password">Password:</label>
+	<input type="text" name="password" id="pword" value="">
+	<!-- Login -->
+	<button id="loginbutton">Login</button>
+	</div><!-- /content -->
+
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div><!-- /footer -->
+</div><!-- /page two -->
+
+
+<script>//login function
+$( "#loginbutton" ).click(function() {
+
+	var uname = $( "#uname" ).val();
+	var pword = $( "#pword" ).val();
+	
+	
+	$.post( "/login", { username:uname, password:pword})
+	.done(function( data ) {
+	    if(data == "customer")
+	    {
+	        alert("Welcome Valued Customer!");
+		    window.location="#doughnuts";
+			}
+		else if(data == "driver")
+		{
+		    alert("Welcome Driver!");
+		    window.location="#driver";
+		    }
+		else if(data == "manager")
+		{
+		    alert("Welcome Manager!")
+			window.location="#manager";
+			}
+		    
+	});
+	});
+
+</script>
+
+<!-- Start of page: #register -->
+<div data-role="page" id="register" data-theme="a">
+
+	<div data-role="header">
+		<h1>Register</h1>
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content">
+	<h2>Please enter your details:</h2>
+	
+	<label for="user">Username:</label>
+	<input type="text" name="user" id="user" value="">
+	<!-- Password -->
+	<label for="password">Password:</label>
+	<input type="text" name="password" id="password" value="">
+	<label for="password2">Re-enter Password:</label>
+	<input type="text" name="password2" id="password2" value="">
+	<!-- Register -->
+	<button id="registerbutton">Register</button>
+
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div><!-- /footer -->
+	</div>
+</div>
+<script>//register function
+$( "#registerbutton" ).click(function() {
+
+	var user = $( "#user" ).val();
+	var password = $( "#password" ).val();
+	var password2 = $( "#password2").val();
+	
+
+	console.log(user);
+	console.log(password);
+	
+	if(password == password2) {
+	
+	    $.post ( "/register", {user:user, password:password})
+	    .done (function( data ) {
+		alert(data );
+		window.location="#one";
+	    });
+	}
+    else {
+		alert("Passwords do not match!");
+		}
+	});
+		
+</script>
+
+<!-- Start of page: #doughnuts -->
+<div data-role="page" id="doughnuts" data-theme="a">
+
+	<div data-role="header">
+		<h1>GK Doughnuts</h1>
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content">
+	<!-- Username -->
+	Test
+	</div>
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+<!-- Start of page: #driver -->
+<div data-role="page" id="driver" data-theme="a">
+
+	<div data-role="header">
+		<h1>Driver</h1>
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content">
+	<div id="output"></div>
+	 <script>
+     $.getJSON( "http://api.weatherstack.com/current?access_key=0efb54177e47053baa81f97516023b64&query=Dublin", function( data ) {
+ 
+        console.log(data);
+    
+        console.log(data.current.temperature);
+        var temp = '<h3>Weather Information:</h3>';
+		temp = temp + '<p>The temparure is ' + data.current.temperature + ' degrees celsius.</p>';
+		temp = temp + '<h3> Conditions:</h3>';
+		temp = temp + '<p>It is ' +data.current.weather_descriptions + ' today.</p>';     
+        $('#output').html(temp);
+    });
+    </script>
+	
+	</div>
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+<!-- Start of page: #manager -->
+<div data-role="page" id="manager" data-theme="a">
+
+	<div data-role="header">
+		<h1>Manager</h1>
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content">
+	
+	<div id="output"></div>  
+  
+   
+	</div>
+
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div><!-- /footer -->
+</div><!-- /page -->
+</body>
+</html>
