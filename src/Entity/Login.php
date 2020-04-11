@@ -31,6 +31,11 @@ class Login
      */
     private $acctype;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +73,18 @@ class Login
     public function setAcctype(string $acctype): self
     {
         $this->acctype = $acctype;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
