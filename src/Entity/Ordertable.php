@@ -5,10 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
- * @ORM\Table(name="`order`")
+ * @ORM\Entity(repositoryClass="App\Repository\OrdertableRepository")
  */
-class Order
+class Ordertable
 {
     /**
      * @ORM\Id()
@@ -26,11 +25,6 @@ class Order
      * @ORM\Column(type="string", length=255)
      */
     private $details;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $time;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -77,18 +71,6 @@ class Order
     public function setDetails(string $details): self
     {
         $this->details = $details;
-
-        return $this;
-    }
-
-    public function getTime(): ?\DateTimeInterface
-    {
-        return $this->time;
-    }
-
-    public function setTime(\DateTimeInterface $time): self
-    {
-        $this->time = $time;
 
         return $this;
     }

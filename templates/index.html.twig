@@ -69,12 +69,7 @@ $( "#loginbutton" ).click(function() {
 	    if(data == "customer")
 	    {
 	        alert("Welcome Valued Customer!");	
-				$.post( "/orders", { }) //retrieves order history for logged in customer and prints it to the #mypanel
-				.done(function( data ) {
-				console.log(data);
-				$('#orderhistory').html(data); 		
-	});
-		    window.location="#doughnuts";
+			orderhistory();			    
 			}
 		else if(data == "driver")
 		{
@@ -156,7 +151,15 @@ $( "#registerbutton" ).click(function() {
 		alert("Passwords do not match!");
 		}
 	});
-		
+
+function orderhistory() {
+	$.post( "/orders", { }) //retrieves order history for logged in customer and prints it to the #mypanel
+	.done(function( data ) {
+	console.log(data);
+	$('#orderhistory').html(data); 		
+	});
+	window.location="#doughnuts";	
+}	
 </script>
 
 <!-- Start of page: #doughnuts -->
@@ -172,7 +175,8 @@ $( "#registerbutton" ).click(function() {
 	</div>
 	
 	<a href="#mypanel">View Order History</a>
-	
+	<br>
+	<h2>Menu</h2>
 <script>
 // template for a product
 
@@ -186,7 +190,126 @@ class product {
 // define our products
 choc = new product("Chocolate Doughnut", 1, 0);
 
-sprinkle = new product("Sprinkle Doughnut", 1, 0);
+sprinkle = new product("Sprinkle Doughnut", 2, 0);
+
+fanta = new product("Fanta 330ml", 1, 0);
+</script>
+
+Chocolate Doughnut 
+<button id="addChoc" class="ui-btn ui-btn-inline">+</button>
+<button id="removeChoc" class="ui-btn ui-btn-inline">-</button>
+<br>				   
+Sprinkle Doughnut
+  <button id="addSprinkle" class="ui-btn ui-btn-inline">+</button>
+<button id="removeSprinkle" class="ui-btn ui-btn-inline">-</button>
+<br>
+Fanta 330ml
+ <button id="addFanta" class="ui-btn ui-btn-inline">+</button>
+<button id="removeFanta" class="ui-btn ui-btn-inline">-</button>
+                  
+ 
+
+<div id="myCart"></div> 
+<button id="checkout">Place Order</button>                
+<script>
+$( "#addChoc" ).click(function() {
+
+       // 
+       choc.qty = choc.qty + 1;
+       updateCart();  
+});
+
+
+
+$( "#removeChoc" ).click(function() {
+
+       choc.qty = choc.qty - 1;
+       updateCart();  
+});
+
+$( "#addSprinkle" ).click(function() {
+
+       // 
+       sprinkle.qty = sprinkle.qty + 1;
+       updateCart();  
+});
+
+
+
+$( "#removeSprinkle" ).click(function() {
+
+       sprinkle.qty = sprinkle.qty - 1;
+       updateCart();  
+});
+
+$( "#addFanta" ).click(function() {
+
+       // 
+       fanta.qty = fanta.qty + 1;
+       updateCart();  
+});
+
+
+
+$( "#removeFanta" ).click(function() {
+
+       fanta.qty = fanta.qty - 1;
+       updateCart();  
+});
+
+// function to update the cart.
+function updateCart(){
+     var content = "<h3>Cart:</h3>";
+      
+      if (choc.qty >= 1) { // check to see if we should add it or not
+          content = content + "Chocolate Doughnut x " + choc.qty + " = €" + choc.qty * choc.price + "<br>";            
+      }
+	  
+	  if (sprinkle.qty >= 1) { // check to see if we should add it or not
+          content = content + "Sprinkle Doughnut x " + sprinkle.qty + " = €" + sprinkle.qty * choc.price + "<br>";            
+      }	
+
+	  if (fanta.qty >= 1) { // check to see if we should add it or not
+          content = content + "Fanta 330ml x " + fanta.qty + " = €" + fanta.qty * fanta.price + "<br>";            
+      }	 	  
+	  
+      // display the content variable in the myCart div.
+      $( "#myCart" ).html(content);
+}
+
+
+$( "#viewCart" ).click(function() {
+      
+       updateCart();  
+    
+  });
+ 
+ $( "#checkout" ).click(function() {
+      
+	    var details = "";
+		var total = 0;
+	   
+	    if(choc.qty >= 1) {
+			details = details + choc.name + " x " + choc.qty + "<br>";
+			total = total + (choc.qty * choc.price);
+			}
+		if(sprinkle.qty >= 1) {
+			details = details + sprinkle.name + " x " + sprinkle.qty + "<br>";
+			total = total + (sprinkle.qty * sprinkle.price);
+			}
+			
+		if (fanta.qty >= 1) { // check to see if we should add it or not
+          details = details + fanta.name + " x " + fanta.qty + "<br>";
+		  total = total + (fanta.qty * fanta.price);            
+      }	 
+	   
+	   $( "#cart" ).html(details);
+       window.location="#checkoutpage";  
+    
+  });  
+
+
+
 </script>
 
 	</div>
@@ -194,8 +317,63 @@ sprinkle = new product("Sprinkle Doughnut", 1, 0);
 		<h4>Page Footer</h4>
 	</div><!-- /footer -->
 </div><!-- /page -->
+<!-- Start of page: #checkout -->
+<div data-role="page" id="checkoutpage" data-theme="a">
 
+	<div data-role="header">
+		<h1>Finalise Order</h1>
+	</div><!-- /header -->
 
+	<div role="main" class="ui-content">
+	
+	<div id="cart"></div>
+	<h2>Please enter your details:</h2>
+	
+	<label for="address">Address:</label>
+	<input type="text" name="address" id="address" value="">
+	<label for="contact">Contact number:</label>
+	<input type="text" name="contact" id="contact" value="">
+	
+	<button id="placeOrder">Confirm and pay</button>
+
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div><!-- /footer -->
+	</div>
+</div>
+<script>
+$( "#placeOrder" ).click(function() {
+      
+        var details = "";
+		var total = 0;
+		var address = $( "#address" ).val();
+		var contact = $( "#contact" ).val();
+	    
+		console.log(address);
+		console.log(contact);
+		
+	    if(choc.qty >= 1) {
+			details = details + choc.name + " x " + choc.qty + "<br>";
+			total = total + (choc.qty * choc.price);
+			}
+		if(sprinkle.qty >= 1) {
+			details = details + sprinkle.name + " x " + sprinkle.qty + "<br>";
+			total = total + (sprinkle.qty * sprinkle.price);
+			}
+			
+		if (fanta.qty >= 1) { // check to see if we should add it or not
+          details = details + fanta.name + " x " + fanta.qty + "<br>";
+		  total = total + (fanta.qty * fanta.price);            
+      }	 
+			
+		$.post ( "/placeorder", {details:details, total:total, contact:contact, address:address})
+	    .done (function( data ) {
+		alert(data );				 
+		orderhistory();    
+	    });
+		
+  });
+</script>
 <!-- Start of page: #driver -->
 <div data-role="page" id="driver" data-theme="a">
 
@@ -222,6 +400,10 @@ sprinkle = new product("Sprinkle Doughnut", 1, 0);
 	<button id="pendingorders">View/Refresh Orders</button>
 	<div id="driverorders"></div>
 	
+	<label for="delivered">Mark following delivery as complete:</label>
+	<input type="text" name="delivered" id="delivered" value="">
+	<button id="deliver">Confirm as Delivered</button>
+	
 	</div>
 
 	<div data-role="footer">
@@ -232,6 +414,17 @@ $("#pendingorders").click(function(){
  $.post( "/driverorders", { })
 	.done(function( data ) {
 	$('#driverorders').html(data);
+		    
+	});
+});
+
+$("#deliver").click(function(){
+
+    var id = $( "#delivered" ).val();
+ $.post( "/update", {id:id })
+	.done(function( data ) {
+	alert(data);
+	location.reload();
 		    
 	});
 });
@@ -253,7 +446,9 @@ $("#pendingorders").click(function(){
 	<div role="main" class="ui-content">
 	<button id="managerorders">View/Refresh Orders</button>
 	<div id="allorders"></div>
-	
+	<label for="cancel">Cancel following delivery:</label>
+	<input type="text" name="cancel" id="cancel" value="">
+	<button id="cancelled">Confirm as Delivered</button>
 	</div>
 
 	<div data-role="footer">
@@ -267,7 +462,16 @@ $("#managerorders").click(function(){
 		    
 	});
 });
+$("#cancelled").click(function(){
 
+    var id = $( "#cancel" ).val();
+ $.post( "/cancel", {id:id })
+	.done(function( data ) {
+	alert(data);
+	location.reload();
+		    
+	});
+});
 </script>
 </div><!-- /page -->
 </body>

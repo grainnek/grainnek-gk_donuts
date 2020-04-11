@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Login;
-use App\Entity\Order;
+use App\Entity\Ordertable;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class LoginController extends AbstractController
@@ -69,7 +69,7 @@ class LoginController extends AbstractController
      */
 	public function customer_orders(SessionInterface $session)
 	{
-		$repository = $this->getDoctrine()->getRepository(Order::class);
+		$repository = $this->getDoctrine()->getRepository(Ordertable::class);
 		
 		$name = $session->get('name');
 		
@@ -84,7 +84,7 @@ class LoginController extends AbstractController
 				$data .= "<p>Order ID: ".$order->getId()."</p>";
 				//$data .= "<p>Ordered on: ".date."</p>";
 				$data .= "<p>".$order->getDetails()."</p>";
-				$data .= "<p>Total: ".$order->getPrice()."</p>";
+				$data .= "<p>Total: €".$order->getPrice()."</p>";
 				$data .= "<p>Order status: ".$order->getStatus()."</p>";
 				$data .= "<hr>";
 			}
@@ -102,7 +102,7 @@ class LoginController extends AbstractController
      */
 	public function manager_orders()
 	{
-		$repository = $this->getDoctrine()->getRepository(Order::class);		
+		$repository = $this->getDoctrine()->getRepository(Ordertable::class);		
 		
 		$orders = $repository->findAll();
 		
@@ -113,15 +113,18 @@ class LoginController extends AbstractController
 		$data .= "<table><thead><tr><th>Order ID</th><th>Customer</th><th>Details</th><th>Address</th><th>Price</th><th>Status</th>";
 			foreach($orders as $order)
 			{	
-				$revenue += $order->getPrice();
-				$total += 1;
+				if($order->getStatus() != "cancelled")
+				{
+				    $revenue += $order->getPrice();
+				    $total += 1;
+				}
 				
 				$data .= "<tr>";
 				$data .= "<td>".$order->getId()."</td>";
 				$data .= "<td>".$order->getName()."</td>";
 				$data .= "<td>".$order->getDetails()."</td>";
 				$data .= "<td>".$order->getAddress()."</td>";
-				$data .= "<td>".$order->getPrice()."</td>";
+				$data .= "<td>€".$order->getPrice()."</td>";
 				$data .= "<td>".$order->getStatus()."</td>";
 				$data .= "</tr>";
 			}
@@ -130,6 +133,7 @@ class LoginController extends AbstractController
 		
 		$data.= "<p>Revenue = €".$revenue."</p>";
 		$data.= "<p>Number of orders placed: ".$total."</p>";
+		$data.= "<p>*Figures do not include cancelled orders.</p>";
 		
 		return new Response($data);		
 		
@@ -139,7 +143,7 @@ class LoginController extends AbstractController
      */
 	public function driver_orders()
 	{
-		$repository = $this->getDoctrine()->getRepository(Order::class);		
+		$repository = $this->getDoctrine()->getRepository(Ordertable::class);		
 		
 		$status = "getting ready";
 		
@@ -156,7 +160,7 @@ class LoginController extends AbstractController
 				$data .= "<td>".$order->getDetails()."</td>";
 				$data .= "<td>".$order->getAddress()."</td>";
 				$data .= "<td>".$order->getContact()."</td>";
-				$data .= "<td>".$order->getPrice()."</td>";
+				$data .= "<td>€".$order->getPrice()."</td>";
 				$data .= "<td>".$order->getStatus()."</td>";
 				$data .= "</tr>";
 			}
@@ -166,5 +170,95 @@ class LoginController extends AbstractController
 		return new Response($data);		
 		
 	}
+	
+	/**
+     * @Route("/placeorder", name="placeorder")
+     */
+    public function place_order(SessionInterface $session)
+    {
+		$request = Request::createFromGlobals();		
+		
+		$details = $request->request->get('details', 'none');
+		$price = $request->request->get('total', 'none');
+		$address = $request->request->get('address', 'none');
+		$contact = $request->request->get('contact', 'none');
+		$name = $session->get('name');
+		
+		
+		$entityManager = $this->getDoctrine()->getManager();
+		
+		$order = new Ordertable();
+		
+		$order->setName($name);
+		$order->setDetails($details);
+		$order->setAddress($address);
+		$order->setContact($contact);		
+		$order->setPrice($price);
+		$order->setStatus("getting ready");
+		
+		$entityManager->persist($order);
+		
+		$entityManager->flush();
+		
+        return new Response("Order placed successfully!");
+    }
+	
+	/**
+     * @Route("/update", name="update")
+     */
+    public function update()
+    {
+		$request = Request::createFromGlobals();
+		//get variables
+		$id = $request->request->get('id', 'none');		
+	
+		$result = $this->getDoctrine()->getRepository(Ordertable::class);
+		$entityManager = $this->getDoctrine()->getManager();
+			
+		$delivery = $result->findOneBy(['id' => $id]);
+		
+		if($delivery) //if the delivery is found
+		{		
+		    $delivery->setStatus("delivered");		    
+			
+			$entityManager->flush();
+		
+		    return new Response("Delivery #".$id." marked as delivered.");		
+		}
+		
+		else 
+		{
+			return new Response('No delivery matching that ID');
+		}
+    }
+	
+	/**
+     * @Route("/cancel", name="cancel")
+     */
+    public function cancel()
+    {
+		$request = Request::createFromGlobals();
+		//get variables
+		$id = $request->request->get('id', 'none');		
+	
+		$result = $this->getDoctrine()->getRepository(Ordertable::class);
+		$entityManager = $this->getDoctrine()->getManager();
+			
+		$delivery = $result->findOneBy(['id' => $id]);
+		
+		if($delivery) //if the delivery is found
+		{		
+		    $delivery->setStatus("cancelled");		    
+			
+			$entityManager->flush();
+		
+		    return new Response("Delivery #".$id." marked as cancelled.");		
+		}
+		
+		else 
+		{
+			return new Response('No delivery matching that ID');
+		}
+    }
 	
 }
