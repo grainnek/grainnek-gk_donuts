@@ -68,7 +68,12 @@ $( "#loginbutton" ).click(function() {
 	.done(function( data ) {
 	    if(data == "customer")
 	    {
-	        alert("Welcome Valued Customer!");
+	        alert("Welcome Valued Customer!");	
+				$.post( "/orders", { }) //retrieves order history for logged in customer and prints it to the #mypanel
+				.done(function( data ) {
+				console.log(data);
+				$('#orderhistory').html(data); 		
+	});
 		    window.location="#doughnuts";
 			}
 		else if(data == "driver")
@@ -80,6 +85,11 @@ $( "#loginbutton" ).click(function() {
 		{
 		    alert("Welcome Manager!")
 			window.location="#manager";
+			}
+		
+		else
+		{
+			alert("Username or password not found!");
 			}
 		    
 	});
@@ -99,6 +109,8 @@ $( "#loginbutton" ).click(function() {
 	
 	<label for="user">Username:</label>
 	<input type="text" name="user" id="user" value="">
+	<label for="name">Full name:</label>
+	<input type="text" name="name" id="name" value="">
 	<!-- Password -->
 	<label for="password">Password:</label>
 	<input type="text" name="password" id="password" value="">
@@ -116,6 +128,7 @@ $( "#loginbutton" ).click(function() {
 $( "#registerbutton" ).click(function() {
 
 	var user = $( "#user" ).val();
+	var name = $( "#name" ).val();
 	var password = $( "#password" ).val();
 	var password2 = $( "#password2").val();
 	
@@ -123,9 +136,17 @@ $( "#registerbutton" ).click(function() {
 	console.log(user);
 	console.log(password);
 	
-	if(password == password2) {
+	if(user == "" || name == ""){
+	    alert("Username or full name cannot be blank!");
+		}
 	
-	    $.post ( "/register", {user:user, password:password})
+	else if(password == "") {
+	    alert("Please enter a password!");
+		}
+	
+	else if(password == password2){
+	
+	    $.post ( "/register", {user:user, password:password, name:name})
 	    .done (function( data ) {
 		alert(data );
 		window.location="#one";
@@ -146,13 +167,34 @@ $( "#registerbutton" ).click(function() {
 	</div><!-- /header -->
 
 	<div role="main" class="ui-content">
-	<!-- Username -->
-	Test
+	<div data-role="panel" id ="mypanel" class="jqm-navmenu-panel" data-position="left" data-display="overlay" data-theme="a">	
+        <div id="orderhistory"></div>
+	</div>
+	
+	<a href="#mypanel">View Order History</a>
+	
+<script>
+// template for a product
+
+class product {
+  constructor(name, price, qty) {
+    this.name = name
+    this.price = price;
+    this.qty = qty;
+  }
+}
+// define our products
+choc = new product("Chocolate Doughnut", 1, 0);
+
+sprinkle = new product("Sprinkle Doughnut", 1, 0);
+</script>
+
 	</div>
 	<div data-role="footer">
 		<h4>Page Footer</h4>
 	</div><!-- /footer -->
 </div><!-- /page -->
+
 
 <!-- Start of page: #driver -->
 <div data-role="page" id="driver" data-theme="a">
@@ -177,6 +219,24 @@ $( "#registerbutton" ).click(function() {
     });
     </script>
 	
+	<button id="pendingorders">View/Refresh Orders</button>
+	<div id="driverorders"></div>
+	
+	</div>
+
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div><!-- /footer -->
+<script>
+$("#pendingorders").click(function(){
+ $.post( "/driverorders", { })
+	.done(function( data ) {
+	$('#driverorders').html(data);
+		    
+	});
+});
+
+</script>
 	</div>
 	<div data-role="footer">
 		<h4>Page Footer</h4>
@@ -191,14 +251,24 @@ $( "#registerbutton" ).click(function() {
 	</div><!-- /header -->
 
 	<div role="main" class="ui-content">
-
-  
-   
+	<button id="managerorders">View/Refresh Orders</button>
+	<div id="allorders"></div>
+	
 	</div>
 
 	<div data-role="footer">
 		<h4>Page Footer</h4>
 	</div><!-- /footer -->
+<script>
+$("#managerorders").click(function(){
+ $.post( "/allorders", { })
+	.done(function( data ) {
+	$('#allorders').html(data);
+		    
+	});
+});
+
+</script>
 </div><!-- /page -->
 </body>
 </html>

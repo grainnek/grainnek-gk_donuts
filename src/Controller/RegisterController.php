@@ -15,11 +15,11 @@ class RegisterController extends AbstractController
      */
     public function index()
     {
-		$request = Request::createFromGlobals();
-		
+		$request = Request::createFromGlobals();		
 		
 		$user = $request->request->get('user', 'none');
-		$password = $request->request->get('password', 'none');			
+		$password = $request->request->get('password', 'none');	
+		$name = $request->request->get('name', 'none');	
 		
 		$entityManager = $this->getDoctrine()->getManager();
 		
@@ -27,13 +27,14 @@ class RegisterController extends AbstractController
 		
 		$customer->setUsername($user);
 		$customer->setPassword($password);
+		$customer->setName($name);
 		$customer->setAcctype("customer");
 		
 		$entityManager->persist($customer);
 		
 		$entityManager->flush();
 		
-        return new Response("Thank you for registering " . $user);
+        return new Response("Thank you for registering " . $name);
     }
 }
 ?>
