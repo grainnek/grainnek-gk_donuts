@@ -28,7 +28,7 @@ class RegisterController extends AbstractController
 		$customer->setUsername($user);
 		$customer->setPassword($password);
 		$customer->setName($name);
-		$customer->setAcctype("customer");
+		$customer->setAcctype("customer"); 
 		
 		$entityManager->persist($customer);
 		

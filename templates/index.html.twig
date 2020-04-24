@@ -1,11 +1,13 @@
-<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<link rel="stylesheet" href="themes/gkdoughnuts.css" />
+  <link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" /> 
+  <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script> 
+  <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> 
 
 <body>
 
 <!-- Start of first page: #one -->
-<div data-role="page" id="one">
+<div data-role="page" id="one" data-theme="A">
 
 	<div data-role="header">
 		<h1>Gráinne's Doughnuts</h1>
@@ -28,13 +30,10 @@
 		
 	</div><!-- /content -->
 
-	<div data-role="footer" data-theme="a">
-		<h4>Page Footer</h4>
-	</div><!-- /footer -->
 </div><!-- /page one -->
 
-<!-- Start of second page: #two -->
-<div data-role="page" id="login" data-theme="a">
+<!-- Start of second page: #login -->
+<div data-role="page" id="login" data-theme="A">
 
 	<div data-role="header">
 		<h1>Login</h1>
@@ -46,14 +45,11 @@
 	<input type="text" name="user" id="uname" value="">
 	<!-- Password -->
 	<label for="password">Password:</label>
-	<input type="text" name="password" id="pword" value="">
+	<input type="password" name="password" id="pword" value="">
 	<!-- Login -->
 	<button id="loginbutton">Login</button>
 	</div><!-- /content -->
 
-	<div data-role="footer">
-		<h4>Page Footer</h4>
-	</div><!-- /footer -->
 </div><!-- /page two -->
 
 
@@ -108,15 +104,12 @@ $( "#loginbutton" ).click(function() {
 	<input type="text" name="name" id="name" value="">
 	<!-- Password -->
 	<label for="password">Password:</label>
-	<input type="text" name="password" id="password" value="">
+	<input type="password" name="password" id="password" value="">
 	<label for="password2">Re-enter Password:</label>
-	<input type="text" name="password2" id="password2" value="">
+	<input type="password" name="password2" id="password2" value="">
 	<!-- Register -->
 	<button id="registerbutton">Register</button>
 
-	<div data-role="footer">
-		<h4>Page Footer</h4>
-	</div><!-- /footer -->
 	</div>
 </div>
 <script>//register function
@@ -190,26 +183,58 @@ class product {
 // define our products
 choc = new product("Chocolate Doughnut", 1, 0);
 
+plain = new product("Plain Doughnut", 1, 0);
+
+lemon = new product("Lemon Doughnut", 1, 0);
+
 sprinkle = new product("Sprinkle Doughnut", 2, 0);
 
+jam = new product("Jam Doughnut", 2, 0);
+
+iced = new product("Iced Doughnut", 2, 0);
+
 fanta = new product("Fanta 330ml", 1, 0);
+
+sprite = new product("Sprite 330ml", 1, 0);
+
+
 </script>
 
 Chocolate Doughnut 
 <button id="addChoc" class="ui-btn ui-btn-inline">+</button>
 <button id="removeChoc" class="ui-btn ui-btn-inline">-</button>
 <br>				   
+Plain Doughnut
+  <button id="addPlain" class="ui-btn ui-btn-inline">+</button>
+<button id="removePlain" class="ui-btn ui-btn-inline">-</button>
+<br>
+Lemon Doughnut
+  <button id="addLemon" class="ui-btn ui-btn-inline">+</button>
+<button id="removeLemon" class="ui-btn ui-btn-inline">-</button>
+<br>
 Sprinkle Doughnut
   <button id="addSprinkle" class="ui-btn ui-btn-inline">+</button>
 <button id="removeSprinkle" class="ui-btn ui-btn-inline">-</button>
 <br>
+Jam Doughnut
+  <button id="addJam" class="ui-btn ui-btn-inline">+</button>
+<button id="removeJam" class="ui-btn ui-btn-inline">-</button>
+<br>
+Iced Doughnut
+  <button id="addIced" class="ui-btn ui-btn-inline">+</button>
+<button id="removeIced" class="ui-btn ui-btn-inline">-</button>
+<br>
 Fanta 330ml
  <button id="addFanta" class="ui-btn ui-btn-inline">+</button>
 <button id="removeFanta" class="ui-btn ui-btn-inline">-</button>
+Sprite 330ml
+ <button id="addSprite" class="ui-btn ui-btn-inline">+</button>
+<button id="removeSprite" class="ui-btn ui-btn-inline">-</button>
                   
  
 
 <div id="myCart"></div> 
+
 <button id="checkout">Place Order</button>                
 <script>
 $( "#addChoc" ).click(function() {
@@ -224,6 +249,36 @@ $( "#addChoc" ).click(function() {
 $( "#removeChoc" ).click(function() {
 
        choc.qty = choc.qty - 1;
+       updateCart();  
+});
+
+$( "#addPlain" ).click(function() {
+
+       // 
+       plain.qty = plain.qty + 1;
+       updateCart();  
+});
+
+
+
+$( "#removePlain" ).click(function() {
+
+       plain.qty = plain.qty - 1;
+       updateCart();  
+});
+
+$( "#addLemon" ).click(function() {
+
+       // 
+       lemon.qty = lemon.qty + 1;
+       updateCart();  
+});
+
+
+
+$( "#removeLemon" ).click(function() {
+
+       lemon.qty = lemon.qty - 1;
        updateCart();  
 });
 
@@ -242,6 +297,36 @@ $( "#removeSprinkle" ).click(function() {
        updateCart();  
 });
 
+$( "#addJam" ).click(function() {
+
+       // 
+       jam.qty = jam.qty + 1;
+       updateCart();  
+});
+
+
+
+$( "#removeJam" ).click(function() {
+
+       jam.qty = jam.qty - 1;
+       updateCart();  
+});
+
+$( "#addIced" ).click(function() {
+
+       // 
+       iced.qty = iced.qty + 1;
+       updateCart();  
+});
+
+
+
+$( "#removeIced" ).click(function() {
+
+       iced.qty = iced.qty - 1;
+       updateCart();  
+});
+
 $( "#addFanta" ).click(function() {
 
        // 
@@ -257,6 +342,21 @@ $( "#removeFanta" ).click(function() {
        updateCart();  
 });
 
+$( "#addSprite" ).click(function() {
+
+       // 
+       sprite.qty = sprite.qty + 1;
+       updateCart();  
+});
+
+
+
+$( "#removeSprite" ).click(function() {
+
+       sprite.qty = sprite.qty - 1;
+       updateCart();  
+});
+
 // function to update the cart.
 function updateCart(){
      var content = "<h3>Cart:</h3>";
@@ -265,13 +365,32 @@ function updateCart(){
           content = content + "Chocolate Doughnut x " + choc.qty + " = €" + choc.qty * choc.price + "<br>";            
       }
 	  
+	   if (plain.qty >= 1) { // check to see if we should add it or not
+          content = content + "Plain Doughnut x " + plain.qty + " = €" + plain.qty * plain.price + "<br>";            
+      }
+	  
+	   if (lemon.qty >= 1) { // check to see if we should add it or not
+          content = content + "Lemon Doughnut x " + lemon.qty + " = €" + lemon.qty * lemon.price + "<br>";            
+      }
+	  
 	  if (sprinkle.qty >= 1) { // check to see if we should add it or not
-          content = content + "Sprinkle Doughnut x " + sprinkle.qty + " = €" + sprinkle.qty * choc.price + "<br>";            
+          content = content + "Sprinkle Doughnut x " + sprinkle.qty + " = €" + sprinkle.qty * sprinkle.price + "<br>";            
       }	
+	   if (jam.qty >= 1) { // check to see if we should add it or not
+          content = content + "Jam Doughnut x " + jam.qty + " = €" + jam.qty * jam.price + "<br>";            
+      }
+	  
+	   if (iced.qty >= 1) { // check to see if we should add it or not
+          content = content + "Iced Doughnut x " + iced.qty + " = €" + iced.qty * iced.price + "<br>";            
+      }
 
 	  if (fanta.qty >= 1) { // check to see if we should add it or not
           content = content + "Fanta 330ml x " + fanta.qty + " = €" + fanta.qty * fanta.price + "<br>";            
       }	 	  
+	  
+	   if (sprite.qty >= 1) { // check to see if we should add it or not
+          content = content + "Sprite 330ml x " + sprite.qty + " = €" + sprite.qty * sprite.price + "<br>";            
+      }
 	  
       // display the content variable in the myCart div.
       $( "#myCart" ).html(content);
@@ -293,17 +412,45 @@ $( "#viewCart" ).click(function() {
 			details = details + choc.name + " x " + choc.qty + "<br>";
 			total = total + (choc.qty * choc.price);
 			}
+			
+		if(plain.qty >= 1) {
+			details = details + plain.name + " x " + plain.qty + "<br>";
+			total = total + (plain.qty * plain.price);
+			}	
+			
+		if(lemon.qty >= 1) {
+			details = details + lemon.name + " x " + lemon.qty + "<br>";
+			total = total + (lemon.qty * lemon.price);
+			}
+		
 		if(sprinkle.qty >= 1) {
 			details = details + sprinkle.name + " x " + sprinkle.qty + "<br>";
 			total = total + (sprinkle.qty * sprinkle.price);
 			}
 			
+		if(jam.qty >= 1) {
+			details = details + jam.name + " x " + jam.qty + "<br>";
+			total = total + (jam.qty * jam.price);
+			}	
+		
+		if(iced.qty >= 1) {
+			details = details + iced.name + " x " + iced.qty + "<br>";
+			total = total + (iced.qty * iced.price);
+			}		
+			
 		if (fanta.qty >= 1) { // check to see if we should add it or not
           details = details + fanta.name + " x " + fanta.qty + "<br>";
 		  total = total + (fanta.qty * fanta.price);            
       }	 
+	  
+		if (sprite.qty >= 1) { // check to see if we should add it or not
+          details = details + sprite.name + " x " + sprite.qty + "<br>";
+		  total = total + (sprite.qty * sprite.price);            
+      }	 
 	   
+	   var displaytotal = "<hr><h4>Order Total: €"+total;
 	   $( "#cart" ).html(details);
+	   $( "#total").html(displaytotal);
        window.location="#checkoutpage";  
     
   });  
@@ -313,9 +460,7 @@ $( "#viewCart" ).click(function() {
 </script>
 
 	</div>
-	<div data-role="footer">
-		<h4>Page Footer</h4>
-	</div><!-- /footer -->
+
 </div><!-- /page -->
 <!-- Start of page: #checkout -->
 <div data-role="page" id="checkoutpage" data-theme="a">
@@ -327,6 +472,7 @@ $( "#viewCart" ).click(function() {
 	<div role="main" class="ui-content">
 	
 	<div id="cart"></div>
+	<div id="total"></div>
 	<h2>Please enter your details:</h2>
 	
 	<label for="address">Address:</label>
@@ -336,9 +482,6 @@ $( "#viewCart" ).click(function() {
 	
 	<button id="placeOrder">Confirm and pay</button>
 
-	<div data-role="footer">
-		<h4>Page Footer</h4>
-	</div><!-- /footer -->
 	</div>
 </div>
 <script>
@@ -356,16 +499,41 @@ $( "#placeOrder" ).click(function() {
 			details = details + choc.name + " x " + choc.qty + "<br>";
 			total = total + (choc.qty * choc.price);
 			}
+			
+		if(plain.qty >= 1) {
+			details = details + plain.name + " x " + plain.qty + "<br>";
+			total = total + (plain.qty * plain.price);
+			}	
+			
+		if(lemon.qty >= 1) {
+			details = details + lemon.name + " x " + lemon.qty + "<br>";
+			total = total + (lemon.qty * lemon.price);
+			}	
+			
 		if(sprinkle.qty >= 1) {
 			details = details + sprinkle.name + " x " + sprinkle.qty + "<br>";
 			total = total + (sprinkle.qty * sprinkle.price);
+			}
+			
+		if(jam.qty >= 1) {
+			details = details + jam.name + " x " + jam.qty + "<br>";
+			total = total + (jam.qty * jam.price);
+			}	
+		
+		if(iced.qty >= 1) {
+			details = details + iced.name + " x " + iced.qty + "<br>";
+			total = total + (iced.qty * iced.price);
 			}
 			
 		if (fanta.qty >= 1) { // check to see if we should add it or not
           details = details + fanta.name + " x " + fanta.qty + "<br>";
 		  total = total + (fanta.qty * fanta.price);            
       }	 
-			
+		if(sprite.qty >= 1) {
+			details = details + sprite.name + " x " + sprite.qty + "<br>";
+			total = total + (sprite.qty * sprite.price);
+			}	
+				
 		$.post ( "/placeorder", {details:details, total:total, contact:contact, address:address})
 	    .done (function( data ) {
 		alert(data );				 
@@ -375,7 +543,7 @@ $( "#placeOrder" ).click(function() {
   });
 </script>
 <!-- Start of page: #driver -->
-<div data-role="page" id="driver" data-theme="a">
+<div data-role="page" id="driver" data-theme="b">
 
 	<div data-role="header">
 		<h1>Driver</h1>
@@ -406,9 +574,7 @@ $( "#placeOrder" ).click(function() {
 	
 	</div>
 
-	<div data-role="footer">
-		<h4>Page Footer</h4>
-	</div><!-- /footer -->
+
 <script>
 $("#pendingorders").click(function(){
  $.post( "/driverorders", { })
@@ -431,13 +597,11 @@ $("#deliver").click(function(){
 
 </script>
 	</div>
-	<div data-role="footer">
-		<h4>Page Footer</h4>
-	</div><!-- /footer -->
+	
 </div><!-- /page -->
 
 <!-- Start of page: #manager -->
-<div data-role="page" id="manager" data-theme="a">
+<div data-role="page" id="manager" data-theme="c">
 
 	<div data-role="header">
 		<h1>Manager</h1>
@@ -451,9 +615,6 @@ $("#deliver").click(function(){
 	<button id="cancelled">Confirm as Delivered</button>
 	</div>
 
-	<div data-role="footer">
-		<h4>Page Footer</h4>
-	</div><!-- /footer -->
 <script>
 $("#managerorders").click(function(){
  $.post( "/allorders", { })
